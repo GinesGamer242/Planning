@@ -5,19 +5,19 @@ using System.Linq;
 
 public class Planning : MonoBehaviour
 {
-  NodePlanning      CurrentStartNode;
-  NodePlanning      CurrentTargetNode;
+  ExampleNodePlanning      CurrentStartNode;
+  ExampleNodePlanning      CurrentTargetNode;
 
-  World             mWorld;
+  ExampleWorld             mWorld;
 
   /***************************************************************************/
 
 	void Start()
   {
-		mWorld = GetComponent<World>();
+		mWorld = GetComponent<ExampleWorld>();
 
     Debug.Log( "Planning..." );
-    FindPlan( World.WorldState.WORLD_STATE_NONE, World.WorldState.WORLD_STATE_ENEMY_DEAD );
+    FindPlan( ExampleWorld.WorldState.WORLD_STATE_NONE, ExampleWorld.WorldState.WORLD_STATE_ENEMY_DEAD );
 	}
 
   /***************************************************************************/
@@ -28,17 +28,17 @@ public class Planning : MonoBehaviour
 
   /***************************************************************************/
 
-	public List<NodePlanning> FindPlan( World.WorldState startWorldState, World.WorldState targetWorldState )
+	public List<ExampleNodePlanning> FindPlan( ExampleWorld.WorldState startWorldState, ExampleWorld.WorldState targetWorldState )
   {
-		CurrentStartNode  = new NodePlanning( startWorldState, null );
-		CurrentTargetNode = new NodePlanning( targetWorldState, null );
+		CurrentStartNode  = new ExampleNodePlanning( startWorldState, null );
+		CurrentTargetNode = new ExampleNodePlanning( targetWorldState, null );
 
-		List<NodePlanning> openSet      = new List<NodePlanning>();
-		HashSet<NodePlanning> closedSet = new HashSet<NodePlanning>();
+		List<ExampleNodePlanning> openSet      = new List<ExampleNodePlanning>();
+		HashSet<ExampleNodePlanning> closedSet = new HashSet<ExampleNodePlanning>();
 		openSet.Add( CurrentStartNode );
     mWorld.openSet    = openSet;
 
-    NodePlanning node = CurrentStartNode;
+    ExampleNodePlanning node = CurrentStartNode;
 		while( openSet.Count > 0 && ( ( node.mWorldState & CurrentTargetNode.mWorldState ) != CurrentTargetNode.mWorldState ) ){
       // Select best node from open list
 			node = openSet[0];
@@ -61,7 +61,7 @@ public class Planning : MonoBehaviour
 			if ( ( ( node.mWorldState & CurrentTargetNode.mWorldState ) != CurrentTargetNode.mWorldState ) ) {
 
         // Open neighbours
-        foreach ( NodePlanning neighbour in mWorld.GetNeighbours( node ) ) {
+        foreach ( ExampleNodePlanning neighbour in mWorld.GetNeighbours( node ) ) {
           if ( /*!neighbour.mWalkable ||*/ closedSet.Any( n => n.mWorldState == neighbour.mWorldState ) ) {
 					  continue;
 				  }
@@ -112,11 +112,11 @@ public class Planning : MonoBehaviour
 
   /***************************************************************************/
 
-	void RetracePlan(NodePlanning startNode, NodePlanning endNode)
+	void RetracePlan(ExampleNodePlanning startNode, ExampleNodePlanning endNode)
   {
-		List<NodePlanning> plan = new List<NodePlanning>();
+		List<ExampleNodePlanning> plan = new List<ExampleNodePlanning>();
 
-    NodePlanning currentNode = endNode;
+    ExampleNodePlanning currentNode = endNode;
 
 		while (currentNode != startNode) {
 			plan.Add(currentNode);
@@ -129,7 +129,7 @@ public class Planning : MonoBehaviour
 
   /***************************************************************************/
 
-	float GetDistance(NodePlanning nodeA, NodePlanning nodeB)
+	float GetDistance(ExampleNodePlanning nodeA, ExampleNodePlanning nodeB)
   {
     // Distance function
     return nodeB.mAction.mCost;
@@ -137,10 +137,10 @@ public class Planning : MonoBehaviour
 
   /***************************************************************************/
 
-	float Heuristic(NodePlanning nodeA, NodePlanning nodeB)
+	float Heuristic(ExampleNodePlanning nodeA, ExampleNodePlanning nodeB)
   {
     // Heuristic function
-    return -World.PopulationCount( (int)(nodeA.mWorldState | nodeB.mWorldState) ) - World.PopulationCount( (int)(nodeA.mWorldState & nodeB.mWorldState) );
+    return -ExampleWorld.PopulationCount( (int)(nodeA.mWorldState | nodeB.mWorldState) ) - ExampleWorld.PopulationCount( (int)(nodeA.mWorldState & nodeB.mWorldState) );
 	}
 
   /***************************************************************************/

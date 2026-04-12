@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class World : MonoBehaviour
+public class ExampleWorld : MonoBehaviour
 {
-    public List<NodePlanning> openSet;
-    public HashSet<NodePlanning> closedSet;
+    public List<ExampleNodePlanning> openSet;
+    public HashSet<ExampleNodePlanning> closedSet;
 
-    public List<NodePlanning> plan;
+    public List<ExampleNodePlanning> plan;
 
     public WorldState mWorldState;
 
-    public List<Action> mActionList;
+    public List<ExampleAction> mActionList;
 
     /***************************************************************************/
 
@@ -33,10 +33,10 @@ public class World : MonoBehaviour
 
     void Awake()
     {
-        mActionList = new List<Action>();
+        mActionList = new List<ExampleAction>();
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_STAB,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_STAB,
             WorldState.WORLD_STATE_CLOSE_TO_ENEMY | WorldState.WORLD_STATE_KNIFE_OWNED,
             WorldState.WORLD_STATE_ENEMY_DEAD,
             WorldState.WORLD_STATE_NONE,
@@ -44,8 +44,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_SHOOT,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_SHOOT,
             WorldState.WORLD_STATE_LINE_OF_SIGHT_TO_ENEMY | WorldState.WORLD_STATE_GUN_LOADED | WorldState.WORLD_STATE_GUN_OWNED,
             WorldState.WORLD_STATE_ENEMY_DEAD,
             WorldState.WORLD_STATE_NONE,
@@ -53,8 +53,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_LOAD_GUN,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_LOAD_GUN,
             WorldState.WORLD_STATE_GUN_OWNED,
             WorldState.WORLD_STATE_GUN_LOADED,
             WorldState.WORLD_STATE_NONE,
@@ -62,8 +62,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_PICK_UP_GUN,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_PICK_UP_GUN,
             WorldState.WORLD_STATE_CLOSE_TO_GUN,
             WorldState.WORLD_STATE_GUN_OWNED,
             WorldState.WORLD_STATE_NONE,
@@ -71,8 +71,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_PICK_UP_KNIFE,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_PICK_UP_KNIFE,
             WorldState.WORLD_STATE_CLOSE_TO_KNIFE,
             WorldState.WORLD_STATE_KNIFE_OWNED,
             WorldState.WORLD_STATE_NONE,
@@ -80,8 +80,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_GO_TO_ENEMY,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_GO_TO_ENEMY,
             WorldState.WORLD_STATE_NONE,
             WorldState.WORLD_STATE_CLOSE_TO_ENEMY,
             WorldState.WORLD_STATE_CLOSE_TO_GUN | WorldState.WORLD_STATE_CLOSE_TO_KNIFE,
@@ -89,8 +89,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_GO_TO_GUN,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_GO_TO_GUN,
             WorldState.WORLD_STATE_NONE,
             WorldState.WORLD_STATE_CLOSE_TO_GUN,
             WorldState.WORLD_STATE_CLOSE_TO_ENEMY | WorldState.WORLD_STATE_CLOSE_TO_KNIFE,
@@ -98,8 +98,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_GO_TO_KNIFE,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_GO_TO_KNIFE,
             WorldState.WORLD_STATE_NONE,
             WorldState.WORLD_STATE_CLOSE_TO_KNIFE,
             WorldState.WORLD_STATE_CLOSE_TO_ENEMY | WorldState.WORLD_STATE_CLOSE_TO_GUN,
@@ -107,8 +107,8 @@ public class World : MonoBehaviour
         );
 
         mActionList.Add(
-            new Action(
-            Action.ActionType.ACTION_TYPE_GET_LINE_OF_SIGHT_TO_ENEMY,
+            new ExampleAction(
+            ExampleAction.ActionType.ACTION_TYPE_GET_LINE_OF_SIGHT_TO_ENEMY,
             WorldState.WORLD_STATE_GUN_LOADED | WorldState.WORLD_STATE_GUN_OWNED,
             WorldState.WORLD_STATE_LINE_OF_SIGHT_TO_ENEMY,
             WorldState.WORLD_STATE_NONE,
@@ -120,11 +120,11 @@ public class World : MonoBehaviour
 
     /***************************************************************************/
 
-    public List<NodePlanning> GetNeighbours(NodePlanning node)
+    public List<ExampleNodePlanning> GetNeighbours(ExampleNodePlanning node)
     {
-        List<NodePlanning> neighbours = new List<NodePlanning>();
+        List<ExampleNodePlanning> neighbours = new List<ExampleNodePlanning>();
 
-        foreach (Action action in mActionList)
+        foreach (ExampleAction action in mActionList)
         {
             // If preconditions are met we can apply effects and the new state is valid
             if ((node.mWorldState & action.mPreconditions) == action.mPreconditions)
@@ -135,7 +135,7 @@ public class World : MonoBehaviour
 
                 // Apply action and effects
                 //NodePlanning newNodePlanning = new NodePlanning( node.mWorldState | action.mEffects, action );
-                NodePlanning newNodePlanning = new NodePlanning(newWorldState | action.mEffects, action);
+                ExampleNodePlanning newNodePlanning = new ExampleNodePlanning(newWorldState | action.mEffects, action);
                 neighbours.Add(newNodePlanning);
             }
         }

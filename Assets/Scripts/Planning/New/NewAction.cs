@@ -1,0 +1,39 @@
+using UnityEngine;
+using System.Collections;
+
+public class NewAction
+{
+    public ActionType mActionType;
+    public NewWorld.WorldState mPreconditions;
+    public NewWorld.WorldState mEffects;
+    public NewWorld.WorldState mRemoveEffects;
+    public float mCost;
+    public string mName;
+
+    /***************************************************************************/
+
+    public enum ActionType
+    {
+        ACTION_TYPE_NONE = -1,
+        ACTION_TYPE_STUDY,
+        ACTION_TYPE_GO_TO_BAR,
+        ACTION_TYPE_PLAY_VIDEOGAMES,
+        ACTION_TYPE_SLEEP,
+        ACTION_TYPE_MAKE_CHEATSHEET,
+        ACTION_TYPE_GO_TO_EXAM
+    }
+
+    /***************************************************************************/
+
+    public NewAction(ActionType actionType, NewWorld.WorldState preconditions, NewWorld.WorldState effects, float cost, string name)
+    {
+        mActionType = actionType;
+        mPreconditions = preconditions;
+        mEffects = effects;
+        mCost = cost;
+        mName = name;
+    }
+
+    /***************************************************************************/
+
+}

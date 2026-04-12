@@ -1,28 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class NodePlanning
+public class ExampleNodePlanning
 {
-	public World.WorldState   mWorldState;
+	public ExampleWorld.WorldState   mWorldState;
   
-  public Action             mAction;
+  public ExampleAction             mAction;
                             
 	public float              gCost;
 	public float              hCost;
                             
-	public NodePlanning       mParent;
+	public ExampleNodePlanning       mParent;
 	
   /***************************************************************************/
 
-	public NodePlanning( World.WorldState worldState, Action action )
-  {
-    mWorldState     = worldState;
-    mAction         = action;
+	public ExampleNodePlanning( ExampleWorld.WorldState worldState, ExampleAction action )
+	{
+		mWorldState     = worldState;
+		mAction         = action;
 
-    gCost           = 0.0f;
-    hCost           = 0.0f;
-    mParent         = null;
-  }
+		gCost           = 0.0f;
+		hCost           = 0.0f;
+		mParent         = null;
+	}
                                                       
   /***************************************************************************/
 
@@ -34,7 +34,7 @@ public class NodePlanning
 
   /***************************************************************************/
 
-  public bool Equals( NodePlanning other )
+  public bool Equals( ExampleNodePlanning other )
   {
     return mWorldState == other.mWorldState;
   }

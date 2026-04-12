@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Action
+public class ExampleAction
 {
     public ActionType mActionType;
-    public World.WorldState mPreconditions;
-    public World.WorldState mEffects;
-    public World.WorldState mRemoveEffects;
+    public ExampleWorld.WorldState mPreconditions;
+    public ExampleWorld.WorldState mEffects;
+    public ExampleWorld.WorldState mRemoveEffects;
     public float mCost;
     public string mName;
 
@@ -29,7 +29,7 @@ public class Action
 
     /***************************************************************************/
 
-    public Action(ActionType actionType, World.WorldState preconditions, World.WorldState effects, World.WorldState removeEffects, float cost, string name)
+    public ExampleAction(ActionType actionType, ExampleWorld.WorldState preconditions, ExampleWorld.WorldState effects, ExampleWorld.WorldState removeEffects, float cost, string name)
     {
         mActionType = actionType;
         mPreconditions = preconditions;
