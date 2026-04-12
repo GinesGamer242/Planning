@@ -7,7 +7,13 @@ public class NewNodePlanning
   
 	public NewAction mAction;
 
-	public int actionCount;
+	public int mEnergy;
+	public int mStress;
+	public int mKnowledge;
+
+	public int mActionCount;
+
+    public int actionCount;
 	public float gCost;
 	public float hCost;
                             
@@ -15,12 +21,14 @@ public class NewNodePlanning
 	
   /***************************************************************************/
 
-	public NewNodePlanning( NewWorld.WorldState worldState, NewAction action )
+	public NewNodePlanning( NewWorld.WorldState worldState, NewAction action, int count )
 	{
 		mWorldState     = worldState;
 		mAction         = action;
 
-		actionCount		= 0;
+		mActionCount	= count;
+
+        actionCount		= 0;
 		gCost           = 0.0f;
 		hCost           = 0.0f;
 		mParent         = null;
@@ -38,7 +46,7 @@ public class NewNodePlanning
 
   public bool Equals( NewNodePlanning other )
   {
-    return mWorldState == other.mWorldState;
+    return mWorldState == other.mWorldState && mActionCount == other.mActionCount;
   }
 
   /***************************************************************************/
