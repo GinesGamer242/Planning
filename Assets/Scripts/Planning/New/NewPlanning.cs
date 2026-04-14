@@ -28,7 +28,7 @@ public class NewPlanning : MonoBehaviour
         CurrentStartNode = new NewNodePlanning(startWorldState, null, 0);
 
         CurrentStartNode.mEnergy = mWorld.mEnergy;
-        CurrentStartNode.mStress = mWorld.mStress;
+        CurrentStartNode.mCortisol = mWorld.mCortisol;
         CurrentStartNode.mKnowledge = mWorld.mKnowledge;
 
         CurrentTargetNode = new NewNodePlanning(targetWorldState, null, 20);
@@ -66,8 +66,8 @@ public class NewPlanning : MonoBehaviour
 
                 for (int i = 0; i < mWorld.plan.Count; ++i)
                 {
-                    Debug.LogFormat("{0}. {1} (Action nº: {2}, Energy: {3}, Stress: {4}, Knowledge: {5})",
-                        i + 1, mWorld.plan[i].mAction.mName, mWorld.plan[i].mActionCount, mWorld.plan[i].mEnergy, mWorld.plan[i].mStress, mWorld.plan[i].mKnowledge);
+                    Debug.LogFormat("{0}. {1} (Action nº: {2}, Energy: {3}, cortisol: {4}, Knowledge: {5})",
+                        i + 1, mWorld.plan[i].mAction.mName, mWorld.plan[i].mActionCount, mWorld.plan[i].mEnergy, mWorld.plan[i].mCortisol, mWorld.plan[i].mKnowledge);
                 }
 
                 if(node.mAction.mActionType == NewAction.ActionType.ACTION_TYPE_GO_TO_EXAM)
@@ -151,8 +151,8 @@ public class NewPlanning : MonoBehaviour
 
         float stepsToTarget = Mathf.Max(0, 20 - nodeA.mActionCount);
 
-        // Penalize for having high stress or low energy and knowledge
-        float statePenalty = (nodeA.mStress * 1.5f) - (nodeA.mEnergy * 1.5f) - (nodeA.mKnowledge * 1.5f);
+        // Penalize for having high cortisol or low energy and knowledge
+        float statePenalty = (nodeA.mCortisol * 1.5f) - (nodeA.mEnergy * 1.5f) - (nodeA.mKnowledge * 1.5f);
 
         return stepsToTarget + statePenalty;
     }

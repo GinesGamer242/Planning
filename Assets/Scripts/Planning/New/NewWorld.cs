@@ -15,7 +15,7 @@ public class NewWorld : MonoBehaviour
     public List<NewAction> mActionList;
 
     public int mEnergy = 90;
-    public int mStress = 10;
+    public int mCortisol = 10;
     public int mKnowledge = 0;
 
     /***************************************************************************/
@@ -30,14 +30,13 @@ public class NewWorld : MonoBehaviour
         WORLD_STATE_STRESSED = 16,
         WORLD_STATE_RELAXED = 32,
         WORLD_STATE_HAS_STUDIED = 64,
-        WORLD_STATE_HAS_CHEATSHEET = 128,
-        WORLD_STATE_HAS_SLEPT = 256,
-        WORLD_STATE_HAS_DRANK = 512,
-        WORLD_STATE_HAS_PLAYED = 1024,
-        WORLD_STATE_HAS_DONE_EXERCISE = 2048,
-        WORLD_STATE_CAN_GO_TO_EXAM = 4096, //Llevar una cuenta de cuántas acciones se han ejecutado y cuando se llegue a 20 acciones en total,
+        WORLD_STATE_HAS_SLEPT = 128,
+        WORLD_STATE_HAS_DRANK = 256,
+        WORLD_STATE_HAS_PLAYED = 512,
+        WORLD_STATE_HAS_DONE_EXERCISE = 1024,
+        WORLD_STATE_CAN_GO_TO_EXAM = 2048, //Llevar una cuenta de cuántas acciones se han ejecutado y cuando se llegue a 20 acciones en total,
                                           //por ejemplo, se activa mediante una función)
-        WORLD_STATE_EXAM_DONE = 8192 //En una función comprobar si KNOWLEDGE => 5 para APROBAR
+        WORLD_STATE_EXAM_DONE = 4096 //En una función comprobar si KNOWLEDGE => 5 para APROBAR
     }
 
     void Awake()
@@ -59,7 +58,7 @@ public class NewWorld : MonoBehaviour
             NewAction.ActionType.ACTION_TYPE_GO_TO_BAR,
             WorldState.WORLD_STATE_HIGH_ENERGY,
             WorldState.WORLD_STATE_HAS_DRANK,
-            1.0f, "Go to bar")
+            1.5f, "Go to bar")
         );
 
         mActionList.Add(
@@ -103,7 +102,7 @@ public class NewWorld : MonoBehaviour
         );
     }
 
-    public WorldState UpdateStates(int energy, int stress, int knowledge)
+    public WorldState UpdateStates(int energy, int cortisol, int knowledge)
     {
         WorldState state = WorldState.WORLD_STATE_NONE;
 
@@ -121,7 +120,7 @@ public class NewWorld : MonoBehaviour
             state |= WorldState.WORLD_STATE_LOW_KNOWLEDGE;
         }
 
-        if (stress >= 50) {
+        if (cortisol >= 50) {
             state |= WorldState.WORLD_STATE_STRESSED;
         }
         else {
@@ -142,7 +141,7 @@ public class NewWorld : MonoBehaviour
             {
                 // 1. Simular el cambio de variables numéricas basándonos en el nodo actual
                 int newEnergy = node.mEnergy;
-                int newStress = node.mStress;
+                int newCortisol = node.mCortisol;
                 int newKnowledge = node.mKnowledge;
 
                 switch (action.mActionType)
@@ -150,38 +149,34 @@ public class NewWorld : MonoBehaviour
                     case NewAction.ActionType.ACTION_TYPE_STUDY:
                         newEnergy -= 20;
                         newKnowledge += 30;
-                        newStress += 15;
+                        newCortisol += 15;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_SLEEP:
                         newEnergy += 50;
-                        newStress -= 20;
+                        newCortisol -= 20;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_PLAY_VIDEOGAMES:
-                        newStress -= 30;
+                        newCortisol -= 30;
                         newEnergy -= 5;
                         newKnowledge -= 10;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_DO_EXERCISE:
                         newEnergy -= 40;
-                        newStress -= 50;
+                        newCortisol -= 50;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_GO_TO_BAR:
                         newEnergy -= 10;
-                        newStress -= 40;
+                        newCortisol -= 40;
                         newKnowledge -= 20;
-                        break;
-                    case NewAction.ActionType.ACTION_TYPE_MAKE_CHEATSHEET:
-                        newKnowledge += 15;
-                        newStress += 10;
                         break;
                 }
 
                 // For avoiding negative or overflow values
                 newEnergy = Mathf.Clamp(newEnergy, 0, 100);
-                newStress = Mathf.Clamp(newStress, 0, 100);
+                newCortisol = Mathf.Clamp(newCortisol, 0, 100);
                 newKnowledge = Mathf.Clamp(newKnowledge, 0, 100);
 
-                WorldState derivedState = UpdateStates(newEnergy, newStress, newKnowledge);
+                WorldState derivedState = UpdateStates(newEnergy, newCortisol, newKnowledge);
 
                 WorldState finalState = derivedState | action.mEffects;
 
@@ -194,7 +189,7 @@ public class NewWorld : MonoBehaviour
                 // New node with the new values
                 NewNodePlanning newNode = new NewNodePlanning(finalState, action, node.mActionCount + 1);
                 newNode.mEnergy = newEnergy;
-                newNode.mStress = newStress;
+                newNode.mCortisol = newCortisol;
                 newNode.mKnowledge = newKnowledge;
 
                 neighbours.Add(newNode);

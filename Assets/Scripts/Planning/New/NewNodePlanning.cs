@@ -8,7 +8,7 @@ public class NewNodePlanning
 	public NewAction mAction;
 
 	public int mEnergy;
-	public int mStress;
+	public int mCortisol;
 	public int mKnowledge;
 
 	public int mActionCount;

@@ -19,7 +19,6 @@ public class NewAction
         ACTION_TYPE_PLAY_VIDEOGAMES,
         ACTION_TYPE_DO_EXERCISE,
         ACTION_TYPE_SLEEP,
-        ACTION_TYPE_MAKE_CHEATSHEET,
         ACTION_TYPE_GO_TO_EXAM
     }
 
