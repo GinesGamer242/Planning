@@ -35,4 +35,45 @@ public class NewAction
 
     /***************************************************************************/
 
+    // En NewAction.cs
+    public float GetDynamicCost(NewNodePlanning currentNode)
+    {
+        float baseCost = mCost;
+
+        switch (mActionType)
+        {
+            case ActionType.ACTION_TYPE_STUDY:
+                if (currentNode.mCortisol > 70) {
+                    baseCost *= 2f;
+                }
+                if (currentNode.mEnergy < 30) {
+                    baseCost *= 1.5f;
+                }
+
+                if (currentNode.mKnowledge > 75) {
+                    baseCost *= 1.5f;
+                }
+                break;
+
+            case ActionType.ACTION_TYPE_SLEEP:
+                if(currentNode.mCortisol > 70) {
+                    baseCost *= 2.0f;
+                }
+
+                if (currentNode.mEnergy < 20) {
+                    baseCost *= 0.5f;
+                }
+                break;
+
+            case ActionType.ACTION_TYPE_GO_TO_BAR:
+            case ActionType.ACTION_TYPE_PLAY_VIDEOGAMES:
+            case ActionType.ACTION_TYPE_DO_EXERCISE:
+                if (currentNode.mCortisol < 10) {
+                    baseCost *= 0.5f;
+                }
+                break;
+        }
+
+        return Mathf.Max(0.1f, baseCost);
+    }
 }

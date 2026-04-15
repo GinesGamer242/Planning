@@ -23,32 +23,27 @@ public class NewWorld : MonoBehaviour
     public enum WorldState
     {
         WORLD_STATE_NONE = 0,
-        WORLD_STATE_HIGH_ENERGY = 1,
-        WORLD_STATE_LOW_ENERGY = 2,
-        WORLD_STATE_HIGH_KNOWLEDGE = 4,
-        WORLD_STATE_LOW_KNOWLEDGE = 8,
-        WORLD_STATE_STRESSED = 16,
-        WORLD_STATE_RELAXED = 32,
-        WORLD_STATE_HAS_STUDIED = 64,
-        WORLD_STATE_HAS_SLEPT = 128,
-        WORLD_STATE_HAS_DRANK = 256,
-        WORLD_STATE_HAS_PLAYED = 512,
-        WORLD_STATE_HAS_DONE_EXERCISE = 1024,
-        WORLD_STATE_CAN_GO_TO_EXAM = 2048, //Llevar una cuenta de cuántas acciones se han ejecutado y cuando se llegue a 20 acciones en total,
-                                          //por ejemplo, se activa mediante una función)
-        WORLD_STATE_EXAM_DONE = 4096 //En una función comprobar si KNOWLEDGE => 5 para APROBAR
+        WORLD_STATE_HAS_ENERGY = 1,
+        WORLD_STATE_CAN_SLEEP = 2,
+        WORLD_STATE_HAS_STUDIED = 4,
+        WORLD_STATE_HAS_SLEPT = 8,
+        WORLD_STATE_HAS_DRANK = 16,
+        WORLD_STATE_HAS_PLAYED = 32,
+        WORLD_STATE_HAS_DONE_EXERCISE = 64,
+        WORLD_STATE_CAN_GO_TO_EXAM = 128,
+        WORLD_STATE_EXAM_DONE = 256
     }
 
     void Awake()
     {
         mActionList = new List<NewAction>();
 
-        mWorldState = WorldState.WORLD_STATE_HIGH_ENERGY | WorldState.WORLD_STATE_RELAXED | WorldState.WORLD_STATE_LOW_KNOWLEDGE;
+        mWorldState = WorldState.WORLD_STATE_HAS_ENERGY;
 
         mActionList.Add(
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_STUDY,
-            WorldState.WORLD_STATE_HIGH_ENERGY,
+            WorldState.WORLD_STATE_HAS_ENERGY,
             WorldState.WORLD_STATE_HAS_STUDIED,
             5.0f, "Study")
         );
@@ -56,42 +51,34 @@ public class NewWorld : MonoBehaviour
         mActionList.Add(
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_GO_TO_BAR,
-            WorldState.WORLD_STATE_HIGH_ENERGY,
+            WorldState.WORLD_STATE_HAS_ENERGY,
             WorldState.WORLD_STATE_HAS_DRANK,
-            1.5f, "Go to bar")
+            2.5f, "Go to bar")
         );
 
         mActionList.Add(
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_PLAY_VIDEOGAMES,
-            WorldState.WORLD_STATE_HIGH_ENERGY,
+            WorldState.WORLD_STATE_HAS_ENERGY,
             WorldState.WORLD_STATE_HAS_PLAYED,
-            1.0f, "Play videogames")
+            2.0f, "Play videogames")
         );
 
         mActionList.Add(
             new NewAction(
-                NewAction.ActionType.ACTION_TYPE_DO_EXERCISE,
-                WorldState.WORLD_STATE_HIGH_ENERGY,
-                WorldState.WORLD_STATE_HAS_DONE_EXERCISE,
-                1.0f, "Do exercise")
+            NewAction.ActionType.ACTION_TYPE_DO_EXERCISE,
+            WorldState.WORLD_STATE_HAS_ENERGY,
+            WorldState.WORLD_STATE_HAS_DONE_EXERCISE,
+            1.5f, "Do exercise")
         );
 
         mActionList.Add(
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_SLEEP,
-            WorldState.WORLD_STATE_LOW_ENERGY,
+            WorldState.WORLD_STATE_CAN_SLEEP,
             WorldState.WORLD_STATE_HAS_SLEPT,
-            1.0f, "Sleep")
+            5.0f, "Sleep")
         );
-
-        //mActionList.Add(
-        //    new NewAction(
-        //    NewAction.ActionType.ACTION_TYPE_MAKE_CHEATSHEET,
-        //    WorldState.WORLD_STATE_LOW_KNOWLEDGE | WorldState.WORLD_STATE_RELAXED,
-        //    WorldState.WORLD_STATE_HAS_CHEATSHEET,
-        //    10.0f, "Make cheatsheet")
-        //);
 
         mActionList.Add(
             new NewAction(
@@ -107,26 +94,15 @@ public class NewWorld : MonoBehaviour
         WorldState state = WorldState.WORLD_STATE_NONE;
 
         if (energy >= 50) {
-            state |= WorldState.WORLD_STATE_HIGH_ENERGY;
+            state |= WorldState.WORLD_STATE_HAS_ENERGY;
+        }
+        else if (energy >= 30) {
+            state |= WorldState.WORLD_STATE_CAN_SLEEP | WorldState.WORLD_STATE_HAS_ENERGY;
         }
         else {
-            state |= WorldState.WORLD_STATE_LOW_ENERGY;
+            state |= WorldState.WORLD_STATE_CAN_SLEEP;
         }
-
-        if (knowledge >= 50) {
-            state |= WorldState.WORLD_STATE_HIGH_KNOWLEDGE;
-        }
-        else {
-            state |= WorldState.WORLD_STATE_LOW_KNOWLEDGE;
-        }
-
-        if (cortisol >= 50) {
-            state |= WorldState.WORLD_STATE_STRESSED;
-        }
-        else {
-            state |= WorldState.WORLD_STATE_RELAXED;
-        }
-
+        
         return state;
     }
 
@@ -139,7 +115,6 @@ public class NewWorld : MonoBehaviour
             // If preconditions are met we can apply effects and the new state is valid
             if ((node.mWorldState & action.mPreconditions) == action.mPreconditions)
             {
-                // 1. Simular el cambio de variables numéricas basándonos en el nodo actual
                 int newEnergy = node.mEnergy;
                 int newCortisol = node.mCortisol;
                 int newKnowledge = node.mKnowledge;
@@ -147,27 +122,27 @@ public class NewWorld : MonoBehaviour
                 switch (action.mActionType)
                 {
                     case NewAction.ActionType.ACTION_TYPE_STUDY:
-                        newEnergy -= 20;
-                        newKnowledge += 30;
-                        newCortisol += 15;
+                        newEnergy -= 15;
+                        newCortisol += 20;
+                        newKnowledge += 35;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_SLEEP:
-                        newEnergy += 50;
-                        newCortisol -= 20;
+                        newEnergy += 60;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_PLAY_VIDEOGAMES:
-                        newCortisol -= 30;
-                        newEnergy -= 5;
-                        newKnowledge -= 10;
+                        newEnergy -= 15;
+                        newCortisol -= 25;
+                        newKnowledge -= 5;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_DO_EXERCISE:
-                        newEnergy -= 40;
-                        newCortisol -= 50;
+                        newEnergy -= 20;
+                        newCortisol -= 30;
+                        newKnowledge -= 5;
                         break;
                     case NewAction.ActionType.ACTION_TYPE_GO_TO_BAR:
                         newEnergy -= 10;
-                        newCortisol -= 40;
-                        newKnowledge -= 20;
+                        newCortisol -= 35;
+                        newKnowledge -= 15;
                         break;
                 }
 
@@ -180,8 +155,8 @@ public class NewWorld : MonoBehaviour
 
                 WorldState finalState = derivedState | action.mEffects;
 
-                // If we are in iteration 19, the exam is the next one
-                if (node.mActionCount + 1 >= 19)
+                // If we are in iteration 14, the exam is the next one
+                if (node.mActionCount + 1 == 14)
                 {
                     finalState |= WorldState.WORLD_STATE_CAN_GO_TO_EXAM;
                 }
@@ -198,8 +173,8 @@ public class NewWorld : MonoBehaviour
         return neighbours;
     }
 
-    //public static int PopulationCount(int n)
-    //{
-    //    return System.Convert.ToString(n, 2).ToCharArray().Count(c => c == '1');
-    //}
+    public static int PopulationCount(int n)
+    {
+        return System.Convert.ToString(n, 2).ToCharArray().Count(c => c == '1');
+    }
 }
