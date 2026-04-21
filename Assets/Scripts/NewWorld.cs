@@ -155,7 +155,7 @@ public class NewWorld : MonoBehaviour
 
                 WorldState finalState = derivedState | action.mEffects;
 
-                // If we are in iteration 14, the exam is the next one
+                // If we are in action 14, the exam is the next one
                 if (node.mActionCount + 1 == 14)
                 {
                     finalState |= WorldState.WORLD_STATE_CAN_GO_TO_EXAM;

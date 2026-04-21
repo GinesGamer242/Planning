@@ -17,7 +17,6 @@ public class NewPlanning : MonoBehaviour
         mWorld = GetComponent<NewWorld>();
 
         Debug.Log("Planning...");
-        //FindPlan(NewWorld.WorldState.WORLD_STATE_NONE, NewWorld.WorldState.WORLD_STATE_EXAM_DONE);
         FindPlan(mWorld.mWorldState, NewWorld.WorldState.WORLD_STATE_EXAM_DONE);
     }
 
@@ -113,7 +112,6 @@ public class NewPlanning : MonoBehaviour
             }
         }
 
-        //return new List<NewNodePlanning>();
         return mWorld.plan;
     }
 
