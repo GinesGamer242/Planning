@@ -17,6 +17,7 @@ public class NewWorld : MonoBehaviour
     public int mEnergy = 90;
     public int mCortisol = 10;
     public int mKnowledge = 0;
+    public NewNodePlanning currentBTAction; // Para que el BT sepa qué acción está ejecutando
 
     /***************************************************************************/
 
