@@ -11,13 +11,12 @@ public class NewPlanning : MonoBehaviour
     NewWorld mWorld;
 
     /***************************************************************************/
-
-    void Awake()
+    void Start()
     {
         mWorld = GetComponent<NewWorld>();
 
         //Debug.Log("Planning...");
-        //FindPlan(mWorld.mWorldState, NewWorld.WorldState.WORLD_STATE_EXAM_DONE);
+        FindPlan(mWorld.mWorldState, NewWorld.WorldState.WORLD_STATE_EXAM_DONE);
     }
 
     /***************************************************************************/
@@ -61,17 +60,17 @@ public class NewPlanning : MonoBehaviour
                 //Debug.Log("PLAN FOUND!");
                 RetracePlan(CurrentStartNode, node);
 
-                //Debug.LogFormat("Statistics: Total nodes {0}, Open nodes {1}, Closed nodes {2}", openSet.Count + closedSet.Count, openSet.Count, closedSet.Count);
+                //Debug.LogFormat("statistics: total nodes {0}, open nodes {1}, closed nodes {2}", openSet.Count + closedSet.Count, openSet.Count, closedSet.Count);
 
                 //for (int i = 0; i < mWorld.plan.Count; ++i)
                 //{
-                //    Debug.LogFormat("{0}. {1} (Accumulated Cost: {2}, Energy: {3}, Cortisol: {4}, Knowledge: {5})",
+                //    Debug.LogFormat("{0}. {1} (accumulated cost: {2}, energy: {3}, cortisol: {4}, knowledge: {5})",
                 //        i + 1, mWorld.plan[i].mAction.mName, mWorld.plan[i].gCost, mWorld.plan[i].mEnergy, mWorld.plan[i].mCortisol, mWorld.plan[i].mKnowledge);
                 //}
 
-                //if(node.mAction.mActionType == NewAction.ActionType.ACTION_TYPE_GO_TO_EXAM)
+                //if (node.mAction.mActionType == NewAction.ActionType.ACTION_TYPE_GO_TO_EXAM)
                 //{
-                //    if(node.mKnowledge >= 50)
+                //    if (node.mKnowledge >= 50)
                 //    {
                 //        Debug.Log("EXAM PASSED");
                 //    }

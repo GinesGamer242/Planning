@@ -33,7 +33,7 @@ public class NPBehave4EventsDebugger : MonoBehaviour
             )
         );
 
-        // attach the debugger component if executed in editor (helps to debug in the inspector) 
+        // attach the debugger component if executed in editor (helps to Debug in the inspector) 
         #if UNITY_EDITOR
                 Debugger debugger = (Debugger)this.gameObject.AddComponent(typeof(Debugger));
                 debugger.BehaviorTree = behaviorTree;
