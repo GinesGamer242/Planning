@@ -26,13 +26,9 @@ public class NewWorld : MonoBehaviour
         WORLD_STATE_NONE = 0,
         WORLD_STATE_HAS_ENERGY = 1,
         WORLD_STATE_CAN_SLEEP = 2,
-        WORLD_STATE_HAS_STUDIED = 4,
-        WORLD_STATE_HAS_SLEPT = 8,
-        WORLD_STATE_HAS_DRANK = 16,
-        WORLD_STATE_HAS_PLAYED = 32,
-        WORLD_STATE_HAS_DONE_EXERCISE = 64,
-        WORLD_STATE_CAN_GO_TO_EXAM = 128,
-        WORLD_STATE_EXAM_DONE = 256
+        WORLD_STATE_CAN_GO_TO_EXAM = 4,
+        WORLD_STATE_EXAM_DONE = 8
+
     }
 
     void Awake()
@@ -45,7 +41,7 @@ public class NewWorld : MonoBehaviour
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_STUDY,
             WorldState.WORLD_STATE_HAS_ENERGY,
-            WorldState.WORLD_STATE_HAS_STUDIED,
+            WorldState.WORLD_STATE_NONE,
             5.0f, "Study")
         );
 
@@ -53,7 +49,7 @@ public class NewWorld : MonoBehaviour
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_GO_TO_BAR,
             WorldState.WORLD_STATE_HAS_ENERGY,
-            WorldState.WORLD_STATE_HAS_DRANK,
+            WorldState.WORLD_STATE_NONE,
             2.5f, "Go to bar")
         );
 
@@ -61,7 +57,7 @@ public class NewWorld : MonoBehaviour
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_PLAY_VIDEOGAMES,
             WorldState.WORLD_STATE_HAS_ENERGY,
-            WorldState.WORLD_STATE_HAS_PLAYED,
+            WorldState.WORLD_STATE_NONE,
             2.0f, "Play videogames")
         );
 
@@ -69,7 +65,7 @@ public class NewWorld : MonoBehaviour
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_DO_EXERCISE,
             WorldState.WORLD_STATE_HAS_ENERGY,
-            WorldState.WORLD_STATE_HAS_DONE_EXERCISE,
+            WorldState.WORLD_STATE_NONE,
             1.5f, "Do exercise")
         );
 
@@ -77,7 +73,7 @@ public class NewWorld : MonoBehaviour
             new NewAction(
             NewAction.ActionType.ACTION_TYPE_SLEEP,
             WorldState.WORLD_STATE_CAN_SLEEP,
-            WorldState.WORLD_STATE_HAS_SLEPT,
+            WorldState.WORLD_STATE_NONE,
             5.0f, "Sleep")
         );
 
