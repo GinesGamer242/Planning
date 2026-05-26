@@ -18,10 +18,10 @@ public class Unit : MonoBehaviour
 
         StopCoroutine("FollowPath");
 
-        mPath = AStar.GetComponent<Pathfinding>().FindPathImmediate(transform.position, destination);
+        mPath = AStar.GetComponent<Pathfinding>().FindPath(transform.position, destination);
 
         // If no path found or already at destination, invoke arrival callback
-        if (mPath == null && mPath.Count == 0) {
+        if (mPath == null || mPath.Count == 0) {
             mOnArrived?.Invoke();
             return;
         }

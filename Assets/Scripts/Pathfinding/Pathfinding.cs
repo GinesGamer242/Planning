@@ -15,7 +15,7 @@ public enum HeuristicMode
 public class Pathfinding : MonoBehaviour
 {
 
-  public Transform      mSeeker;
+    public Transform      mSeeker;
 
 	Grid                Grid;
     Bresenham           Bresenham;
@@ -34,7 +34,7 @@ public class Pathfinding : MonoBehaviour
 
     /***************************************************************************/
 
-    public List<NodePathfinding> FindPathImmediate(Vector3 startPos, Vector3 targetPos)
+    public List<NodePathfinding> FindPath(Vector3 startPos, Vector3 targetPos)
     {
         NodePathfinding startNode = Grid.NodeFromWorldPoint(startPos);
         NodePathfinding targetNode = Grid.NodeFromWorldPoint(targetPos);
@@ -78,6 +78,12 @@ public class Pathfinding : MonoBehaviour
             {
                 List<NodePathfinding> path = BuildPath(startNode, targetNode);
                 Grid.path = path;
+
+                int totalNodes = openSet.Count + closedSet.Count;
+                int openNodes = openSet.Count;
+                int closedNodes = closedSet.Count;
+                Debug.Log($"Total nodes {totalNodes}, Open nodes: {openNodes}, Closed nodes: {closedNodes}");
+
                 return path;
             }
 

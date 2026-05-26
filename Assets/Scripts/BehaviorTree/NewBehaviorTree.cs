@@ -38,9 +38,6 @@ public class NewBehaviorTree : MonoBehaviour
 
         mBehaviorTree = new Root(mBlackboard,
             new Selector(
-                new BlackboardCondition("examDone", Operator.IS_EQUAL, true,
-                    Stops.IMMEDIATE_RESTART, new WaitUntilStopped()),
-
                 new Sequence(
                     new Action((bool planning) =>
                     {
@@ -59,7 +56,7 @@ public class NewBehaviorTree : MonoBehaviour
 
                         mBlackboard.Set("planFailed", false);
                         mBlackboard.Set("planFinished", false);
-                        mBlackboard.Set("examDone", false);
+                        //mBlackboard.Set("examDone", false);
                         mBlackboard.Set("unitMoving", false);
 
                         return Action.Result.SUCCESS;
@@ -117,10 +114,22 @@ public class NewBehaviorTree : MonoBehaviour
                                             mWorld.mWorldState |= mPlan[mCurrentActionIndex].mAction.mEffects;
 
                                             Debug.Log($"{mTotalStepsCounter}. GO TO EXAM " +
-                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})");
+                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})" +
+                                                      $"(Accumulated Cost: {mPlan[mCurrentActionIndex].gCost})");
                                             Debug.Log(mWorld.mKnowledge >= 50 ? "EXAM PASSED" : "EXAM FAILED");
 
-                                            mBlackboard.Set("examDone", true);
+                                            // Clear the state for replanning
+                                            mWorld.mWorldState &= ~NewWorld.WorldState.WORLD_STATE_EXAM_DONE;
+                                            mWorld.mWorldState &= ~NewWorld.WorldState.WORLD_STATE_CAN_GO_TO_EXAM;
+
+                                            // Replan from current world state
+                                            mPlan = mPlanning.FindPlan(mWorld.mWorldState, NewWorld.WorldState.WORLD_STATE_EXAM_DONE);
+                                            mCurrentActionIndex = 0;
+                                            mTotalStepsCounter = 0;
+                                            mBlackboard.Set("planFailed", false);
+                                            mBlackboard.Set("planFinished", false);
+                                            mBlackboard.Set("unitMoving", false);
+                                            Debug.Log($"Replanned in {mPlan.Count} steps");
                                             return Action.Result.SUCCESS;
                                         }
                                         return Action.Result.PROGRESS;
@@ -142,7 +151,8 @@ public class NewBehaviorTree : MonoBehaviour
                                                                | mPlan[mCurrentActionIndex].mAction.mEffects;
 
                                             Debug.Log($"{mTotalStepsCounter}. SLEEP " +
-                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})");
+                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})" +
+                                                      $"(Accumulated Cost: {mPlan[mCurrentActionIndex].gCost})");
                                             mCurrentActionIndex++;
                                             return Action.Result.SUCCESS;
                                         }
@@ -167,7 +177,8 @@ public class NewBehaviorTree : MonoBehaviour
                                                                | mPlan[mCurrentActionIndex].mAction.mEffects;
 
                                             Debug.Log($"{mTotalStepsCounter}. STUDY " +
-                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})");
+                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})" +
+                                                      $"(Accumulated Cost: {mPlan[mCurrentActionIndex].gCost})");
                                             mCurrentActionIndex++;
                                             return Action.Result.SUCCESS;
                                         }
@@ -192,7 +203,8 @@ public class NewBehaviorTree : MonoBehaviour
                                                                | mPlan[mCurrentActionIndex].mAction.mEffects;
 
                                             Debug.Log($"{mTotalStepsCounter}. DO EXERCISE " +
-                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})");
+                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})" +
+                                                      $"(Accumulated Cost: {mPlan[mCurrentActionIndex].gCost})");
                                             mCurrentActionIndex++;
                                             return Action.Result.SUCCESS;
                                         }
@@ -217,7 +229,8 @@ public class NewBehaviorTree : MonoBehaviour
                                                                | mPlan[mCurrentActionIndex].mAction.mEffects;
 
                                             Debug.Log($"{mTotalStepsCounter}. GO TO BAR " +
-                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})");
+                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})" +
+                                                      $"(Accumulated Cost: {mPlan[mCurrentActionIndex].gCost})");
                                             mCurrentActionIndex++;
                                             return Action.Result.SUCCESS;
                                         }
@@ -242,7 +255,8 @@ public class NewBehaviorTree : MonoBehaviour
                                                                | mPlan[mCurrentActionIndex].mAction.mEffects;
 
                                             Debug.Log($"{mTotalStepsCounter}. PLAY VIDEOGAMES " +
-                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})");
+                                                      $"(Energy: {mWorld.mEnergy}, Cortisol: {mWorld.mCortisol}, Knowledge: {mWorld.mKnowledge})" +
+                                                      $"(Accumulated Cost: {mPlan[mCurrentActionIndex].gCost})");
                                             mCurrentActionIndex++;
                                             return Action.Result.SUCCESS;
                                         }
